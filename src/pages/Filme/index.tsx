@@ -23,7 +23,7 @@ function Filme() {
       await api
         .get(`movie/${id}`, {
           params: {
-            api_key: "b43ee0f5c95e87749bb31d1f361e9d6b",
+            api_key: import.meta.env.VITE_API_KEY,
             language: "pt-BR",
           },
         })
