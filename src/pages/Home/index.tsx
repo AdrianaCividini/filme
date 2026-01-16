@@ -4,8 +4,13 @@ import { Link } from "react-router-dom";
 
 import "./home.css";
 
+interface Filme {
+  id: number;
+  title: string;
+  poster_path: string;
+}
 function Home() {
-  const [filmes, setFilmes] = useState([]);
+  const [filmes, setFilmes] = useState<Filme[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -40,7 +45,7 @@ function Home() {
               <strong>{filme.title}</strong>
               <img
                 src={`https://image.tmdb.org/t/p/original/${filme.poster_path}`}
-                alt={filme.id}
+                alt={String(filme.id)}
               />
               <Link to={`/filme/${filme.id}`}>Acessar</Link>
             </article>

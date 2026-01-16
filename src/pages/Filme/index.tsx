@@ -4,10 +4,18 @@ import { toast } from "react-toastify";
 
 import "./filme-info.css";
 import api from "../../services/api";
+
+interface Filme {
+  id: number;
+  title: string;
+  backdrop_path: string;
+  overview: string;
+  vote_average: number;
+}
 function Filme() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [filme, setFilme] = useState({});
+  const [filme, setFilme] = useState<Filme | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -23,9 +31,8 @@ function Filme() {
           setFilme(response.data);
           setLoading(false);
         })
-        .catch((err) => {
+        .catch(() => {
           navigate("/", { replace: true });
-          return;
         });
     }
     loadFilme();
@@ -38,10 +45,14 @@ function Filme() {
     return <div>Carregando filme...</div>;
   }
 
-  function salvarFilme() {
-    const minhaLista = localStorage.getItem("@primeflix");
+  if (!filme) {
+    return <div>Filme não encontrado</div>;
+  }
 
-    let filmesSalvos = JSON.parse(minhaLista) || [];
+  function salvarFilme() {
+    if (!filme) return;
+    const minhaLista = localStorage.getItem("@primeflix");
+    const filmesSalvos: Filme[] = minhaLista ? JSON.parse(minhaLista) : [];
 
     const hasFilme = filmesSalvos.some(
       (filmeSalvo) => filmeSalvo.id === filme.id

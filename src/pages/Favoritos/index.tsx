@@ -4,18 +4,21 @@ import { toast } from "react-toastify";
 
 import "./favoritos.css";
 
+interface Filme {
+  id: number;
+  title: string;
+}
+
 function Favoritos() {
-  const [filmes, setFilmes] = useState([]);
+  const [filmes, setFilmes] = useState<Filme[]>([]);
 
   useEffect(() => {
     const minhaLista = localStorage.getItem("@primeflix");
-    setFilmes(JSON.parse(minhaLista) || []);
+    setFilmes(minhaLista ? JSON.parse(minhaLista) : []);
   }, []);
 
-  function excluirFilme(id) {
-    let filtroFilmes = filmes.filter((item) => {
-      return item.id !== id;
-    });
+  function excluirFilme(id: number) {
+    const filtroFilmes = filmes.filter((filme) => filme.id !== id);
 
     setFilmes(filtroFilmes);
     localStorage.setItem("@primeflix", JSON.stringify(filtroFilmes));
